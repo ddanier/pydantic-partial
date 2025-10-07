@@ -42,3 +42,10 @@ release version: (uv "version" version)
     git tag "v$(uv version --short)"
     git push
     git push --tags
+
+version-bump version_bump: (uv "version" "--bump" version_bump)
+    git add pyproject.toml
+    git commit -m "release: 🔖 v$(uv version --short)" --no-verify
+    git tag "v$(uv version --short)"
+    git push
+    git push --tags
