@@ -1,6 +1,6 @@
 [project]
 name = "pydantic-partial"
-version = "0.10.0"
+version = "0.10.1"
 description = "Create partial models from your pydantic models. Partial models may allow None for certain or all fields."
 authors = [{ name = "TEAM23 GmbH", email = "info@team23.de" }]
 license = "MIT"
