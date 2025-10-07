@@ -46,7 +46,7 @@ def create_partial_model(
     base_cls: type[SelfT],
     *fields: str,
     recursive: bool = False,
-    partial_cls_name: Optional[str] = None,
+    partial_cls_name: str | None = None,
 ) -> type[SelfT]:
     # Convert one type to being partial - if possible
     def _partial_annotation_arg(field_name_: str, field_annotation: type) -> type:
@@ -118,7 +118,7 @@ def create_partial_model(
                 )
             ):
                 optional_fields[field_name] = (
-                    Optional[field_annotation],
+                    Optional[field_annotation],  # noqa: UP045
                     copy_field_info(
                         field_info,
                         default=None,  # Set default to None
@@ -157,7 +157,7 @@ class PartialModelMixin(pydantic.BaseModel):
         cls: type[ModelSelfT],
         *fields: str,
         recursive: bool = False,
-        partial_cls_name: Optional[str] = None,
+        partial_cls_name: str | None = None,
     ) -> type[ModelSelfT]:
         return cast(
             type[ModelSelfT],
@@ -169,7 +169,7 @@ class PartialModelMixin(pydantic.BaseModel):
         cls: type[ModelSelfT],
         *fields: str,
         recursive: bool = False,
-        partial_cls_name: Optional[str] = None,
+        partial_cls_name: str | None = None,
     ) -> type[ModelSelfT]:
         warnings.warn(
             "as_partial(...) is deprecated, use model_as_partial(...) instead",

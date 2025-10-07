@@ -1,4 +1,4 @@
-/poetry.lock
+/uv.lock
 /dist/*
 /.coverage
 /.tox

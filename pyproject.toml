@@ -1,30 +1,34 @@
-[tool.poetry]
+[project]
 name = "pydantic-partial"
 version = "0.9.0"
 description = "Create partial models from your pydantic models. Partial models may allow None for certain or all fields."
-authors = ["TEAM23 GmbH <info@team23.de>"]
+authors = [{ name = "TEAM23 GmbH", email = "info@team23.de" }]
 license = "MIT"
-repository = "https://github.com/team23/pydantic-partial"
 readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0.0,<3.0.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pydantic = ">=2.0.0,<3.0.0"
+[project.urls]
+Repository = "https://github.com/team23/pydantic-partial"
 
-[tool.poetry.group.dev.dependencies]
-pytest = ">=7.1.2,<9.0.0"
-pytest-cov = ">=3,<8"
-tox = ">=3.26,<5.0"
-ruff = ">=0.5.0,<0.14.0"
-pyright = ">=1.1.350,<1.2"
-fastapi = ">=0.116.0,<1"  # just for testing the compatibilty
-anyio = ">=4.9.0,<5.0.0"
-httpx = ">=0.28.1,<0.29.0"
-trio = ">=0.30.0,<0.32.0"
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2,<9.0.0",
+    "pytest-cov>=7.0.0,<8",
+    "tox>=4.30.3,<5.0",
+    "ruff>=0.13.3,<0.14.0",
+    "pyright>=1.1.406,<1.2",
+    "fastapi>=0.118.0,<1.0.0",  # for compatibility testing
+    "anyio>=4.11.0,<5.0.0",
+    "httpx>=0.28.1,<0.29.0",
+    "trio>=0.31.0,<0.32.0",
+]
 
 [tool.ruff]
 line-length = 115
-target-version = "py39"
+target-version = "py310"
 output-format = "grouped"
 
 [tool.ruff.lint]
@@ -37,5 +41,9 @@ ignore = ["A001","A002","A003","ANN401","C901","N8","B008","F405","F821"]
 "test_*.py" = ["S101","ANN","F401"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.8.22,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "pydantic_partial"
+module-root = ""

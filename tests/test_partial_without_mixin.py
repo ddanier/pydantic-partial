@@ -7,7 +7,7 @@ import pytest
 from pydantic_partial import PartialModelMixin, create_partial_model
 
 
-def _field_is_required(model: Union[type[pydantic.BaseModel], pydantic.BaseModel], field_name: str) -> bool:
+def _field_is_required(model: type[pydantic.BaseModel] | pydantic.BaseModel, field_name: str) -> bool:
     """Check if a field is required on a pydantic V2 model."""
 
     return model.model_fields[field_name].is_required()
@@ -25,10 +25,8 @@ class SomethingWithMixin(PartialModelMixin, pydantic.BaseModel):
 
 
 class SomethingWithUnionTypes(PartialModelMixin, pydantic.BaseModel):
-    name_as_union: Union[str, int]
-
-    if sys.version_info >= (3, 10):
-        name_as_uniontype: str | int
+    name_as_union: Union[str, int]  # noqa: UP007
+    name_as_uniontype: str | int
 
 
 def test_setup_is_sane():

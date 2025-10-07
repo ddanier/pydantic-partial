@@ -9,14 +9,14 @@ from pydantic_partial import PartialModelMixin
 
 
 def _field_is_required(
-    model: Union[type[pydantic.BaseModel], pydantic.BaseModel],
+    model: type[pydantic.BaseModel] | pydantic.BaseModel,
     field_name: str,
 ) -> bool:
     """Check if a field is required on a pydantic V2 model."""
     return model.model_fields[field_name].is_required()
 
 def _get_subtype(
-    model: Union[type[pydantic.BaseModel], pydantic.BaseModel],
+    model: type[pydantic.BaseModel] | pydantic.BaseModel,
     field_name: str,
 ) -> pydantic.BaseModel:
     try:
@@ -25,19 +25,19 @@ def _get_subtype(
         return get_args(model.model_fields[field_name].annotation)[0]
 
 def _get_alias(
-    model: Union[type[pydantic.BaseModel], pydantic.BaseModel],
+    model: type[pydantic.BaseModel] | pydantic.BaseModel,
     field_name: str,
 ) -> str:
     return model.model_fields[field_name].alias
 
 def _get_title(
-    model: Union[type[pydantic.BaseModel], pydantic.BaseModel],
+    model: type[pydantic.BaseModel] | pydantic.BaseModel,
     field_name: str,
 ) -> str:
     return model.model_fields[field_name].title
 
 def _get_extra(
-    model: Union[type[pydantic.BaseModel], pydantic.BaseModel],
+    model: type[pydantic.BaseModel] | pydantic.BaseModel,
     field_name: str,
 ) -> dict[str, Any]:
     return model.model_fields[field_name].json_schema_extra
@@ -194,7 +194,7 @@ def test_partial_allows_explicit_recursive(
     items_required: bool,
     name_required: bool,
     age_required: bool,
-    example_items: Iterable[Union[None,list[Any]]],
+    example_items: Iterable[None | list[Any]],
 ):
     SomethingListPartial = SomethingList.model_as_partial(*partial_fields,recursive=recursive)
 
