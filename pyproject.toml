@@ -42,7 +42,7 @@ ignore = ["A001","A002","A003","ANN401","C901","N8","B008","F405","F821"]
 "test_*.py" = ["S101","ANN","F401"]
 
 [build-system]
-requires = ["uv_build>=0.8.22,<0.9.0"]
+requires = ["uv_build>=0.8.22,<0.10.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
