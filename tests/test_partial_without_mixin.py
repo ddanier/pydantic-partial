@@ -18,6 +18,8 @@ class Something(pydantic.BaseModel):
     age: int
     already_optional: None = None
     already_required: int = pydantic.Field(default=1)
+    str_constraints: str = pydantic.Field(min_length=2, pattern="^[a-z]+$")
+    int_constraints: int = pydantic.Field(gt=2, lt=10)
 
 
 class SomethingWithMixin(PartialModelMixin, pydantic.BaseModel):
@@ -50,8 +52,8 @@ def test_partial_model_will_be_cached():
 
 
 def test_partial_model_will_only_be_cached_with_same_params():
-    SomethingPartial1 = create_partial_model(Something, 'name')
-    SomethingPartial2 = create_partial_model(Something, 'age')
+    SomethingPartial1 = create_partial_model(Something, "name")
+    SomethingPartial2 = create_partial_model(Something, "age")
 
     assert SomethingPartial1 is not SomethingPartial2
 
@@ -76,3 +78,23 @@ def test_partial_class_name_can_be_overridden():
 
 def test_recursive_on_unions_work():  # see https://github.com/team23/pydantic-partial/issues/52
     create_partial_model(SomethingWithUnionTypes, recursive=True)
+
+
+def test_str_constraints_should_be_preserved():
+    SomethingPartial = create_partial_model(Something)
+    assert SomethingPartial()
+    assert SomethingPartial(str_constraints="abc")
+    with pytest.raises(pydantic.ValidationError):
+        assert SomethingPartial(str_constraints="a")
+    # json schema generation should not fail
+    assert SomethingPartial.model_json_schema()
+
+
+def test_int_constraints_should_be_preserved():
+    SomethingPartial = create_partial_model(Something)
+    assert SomethingPartial()
+    assert SomethingPartial(int_constraints=3)
+    with pytest.raises(pydantic.ValidationError):
+        assert SomethingPartial(int_constraints=99)
+    # json schema generation should not fail
+    assert SomethingPartial.model_json_schema()
