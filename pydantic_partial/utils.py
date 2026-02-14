@@ -27,7 +27,7 @@ def copy_field_info(field_info: FieldInfo, **overrides: Any) -> FieldInfo:
                 k: v
                 for k, v
                 in field_info.__repr_args__()
-                if k not in ("extra", "annotation", "required")
+                if k not in ("extra", "annotation", "required", "metadata")
             },
             **overrides,
         },
