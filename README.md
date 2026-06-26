@@ -1,5 +1,8 @@
 # pydantic-partial
 
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/pydantic-partial?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/pydantic-partial)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/pydantic-partial?period=monthly&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads%2Fmonth)](https://pepy.tech/projects/pydantic-partial)
+
 ## Installation
 
 Just use `pip install pydantic-partial` to install the library.
