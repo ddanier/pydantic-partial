@@ -2,7 +2,7 @@
 name = "pydantic-partial"
 version = "0.11.0"
 description = "Create partial models from your pydantic models. Partial models may allow None for certain or all fields."
-authors = [{ name = "TEAM23 GmbH", email = "info@team23.de" }]
+authors = [{ name = "David Danier", email = "david.danier@gmail.com" }, { name = "TEAM23 GmbH", email = "info@team23.de" }]
 license = "MIT"
 license-files = ["LICENSE"]
 readme = "README.md"
