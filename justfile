@@ -2,24 +2,24 @@ default:
     just --list
 
 [unix]
-_install-pre-commit:
+_install-prek:
     #!/usr/bin/env bash
-    if ( which pre-commit > /dev/null 2>&1 )
+    if ( which prek > /dev/null 2>&1 )
     then
-        pre-commit install --install-hooks
+        prek install --install-hooks
     else
         echo "-----------------------------------------------------------------"
-        echo "pre-commit is not installed - cannot enable pre-commit hooks!"
-        echo "Recommendation: Install pre-commit ('brew install pre-commit')."
+        echo "prek is not installed - cannot enable prek hooks!"
+        echo "Recommendation: Install prek ('brew install prek')."
         echo "-----------------------------------------------------------------"
     fi
 
 [windows]
-_install-pre-commit:
+_install-prek:
     #!powershell.exe
-    Write-Host "Please ensure pre-commit hooks are installed using 'pre-commit install --install-hooks'"
+    Write-Host "Please ensure prek hooks are installed using 'prek install --install-hooks'"
 
-install: (uv "sync" "--group" "dev") && _install-pre-commit
+install: (uv "sync" "--group" "dev") && _install-prek
 
 update: (uv "sync" "--group" "dev")
 
