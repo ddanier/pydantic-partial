@@ -6,7 +6,7 @@ _install-prek:
     #!/usr/bin/env bash
     if ( which prek > /dev/null 2>&1 )
     then
-        prek install --install-hooks
+        prek install --prepare-hooks
     else
         echo "-----------------------------------------------------------------"
         echo "prek is not installed - cannot enable prek hooks!"
@@ -17,7 +17,7 @@ _install-prek:
 [windows]
 _install-prek:
     #!powershell.exe
-    Write-Host "Please ensure prek hooks are installed using 'prek install --install-hooks'"
+    Write-Host "Please ensure prek hooks are installed using 'prek install --prepare-hooks'"
 
 install: (uv "sync" "--group" "dev") && _install-prek
 
