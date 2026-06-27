@@ -21,7 +21,7 @@ hooks = [
 
 [[repos]]
 repo = "https://github.com/astral-sh/ruff-pre-commit"
-rev = "v0.14.0"
+rev = "v0.15.20"
 hooks = [
   {
     id = "ruff",
@@ -34,7 +34,7 @@ hooks = [
 
 [[repos]]
 repo = "https://github.com/alessandrojcm/commitlint-pre-commit-hook"
-rev = "v9.23.0"
+rev = "v9.26.0"
 hooks = [
   {
     id = "commitlint",
