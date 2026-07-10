@@ -118,12 +118,53 @@ converted to partial models.
 partials by creating partials for all the required models and then override
 the fields on you outer partial model class. This is way more explicit.
 
+## Static type checking with `mypy`
+
+`pydantic-partial` ships a `mypy` plugin so that partial models created with
+`model_as_partial()` are understood by static type checking, not just at runtime.
+
+Enable it alongside Pydantic's own plugin (both are required — the plugin reads the
+field metadata `pydantic.mypy` produces):
+
+```toml
+# pyproject.toml
+[tool.mypy]
+plugins = ["pydantic.mypy", "pydantic_partial.mypy"]
+```
+
+```python
+from pydantic import BaseModel
+from pydantic_partial import PartialModelMixin
+
+
+class Foo(PartialModelMixin, BaseModel):
+    id: int
+
+
+PartialFoo = Foo.model_as_partial()
+
+reveal_type(PartialFoo())  # PartialFoo, with id: int | None
+PartialFoo()               # no error - all fields are optional
+
+
+def something(x: PartialFoo) -> None:  # PartialFoo is a real, usable type
+    ...
+```
+
+Currently the plugin supports the no-argument `model_as_partial()` call (all fields
+become optional) in the `PartialFoo = Foo.model_as_partial()` assignment form.
+Field-selecting calls (`model_as_partial("id")`), `recursive=True`, and non-assignment
+uses are not handled yet and fall back to the checker's default behaviour (never a crash
+or a silently wrong type). `pyright` is not supported yet.
+
 ## Known limitations
 
-`pydantic-partial` cannot generate new class types that actually are supported by the
-Python typing system rules. This means that the partial models will only be recognized
-as the same as their original model classes - type checkers will not know about the partial
-model changes and thus will think all those partial fields are still required.
+Without the `mypy` plugin described above (for example under `pyright`, or for the
+partial variants the plugin does not cover yet), `pydantic-partial` cannot generate new
+class types that are supported by the Python typing system rules. In those cases the
+partial models will only be recognized as the same as their original model classes -
+type checkers will not know about the partial model changes and thus will think all
+those partial fields are still required.
 
 This is due to the fact that Python itself has no concept of partials. `pydantic-partial`
 could (in theory) provide plugins for `mypy` for example to "patch" this in, but this would
