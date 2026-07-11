@@ -18,6 +18,15 @@ MODEL = """
         age: int
 """
 
+MODEL_WITH_DEFAULT = """
+    import pydantic
+    from pydantic_partial import PartialModelMixin
+
+    class User(PartialModelMixin, pydantic.BaseModel):
+        name: str
+        count: int = 0
+"""
+
 
 def test_all_fields_become_optional(mypy):
     result = mypy.run(MODEL + """
@@ -97,6 +106,63 @@ def test_as_partial_alias_also_handled(mypy):
     """)
     assert not any("Missing named argument" in e for e in result.errors), result.stdout
     assert "str | None" in result.stdout
+
+
+# --- field-selecting calls: model_as_partial("age") ------------------------
+
+
+def test_single_field_selection_only_that_field_optional(mypy):
+    result = mypy.run(MODEL + """
+    Partial = User.model_as_partial("age")
+    p = Partial(name="x")   # age optional, name still required
+    reveal_type(p.age)      # int | None
+    reveal_type(p.name)     # str, unchanged
+    """)
+    assert result.errors == []
+    assert "int | None" in result.stdout
+    assert "str | None" not in result.stdout  # name must not have been made optional
+
+
+def test_unselected_field_stays_required(mypy):
+    result = mypy.run(MODEL + """
+    Partial = User.model_as_partial("age")
+    Partial()   # name is still required, so this must error
+    """)
+    assert any("Missing named argument" in e and '"name"' in e for e in result.errors)
+    assert not any("Missing named argument" in e and '"age"' in e for e in result.errors)
+
+
+def test_multiple_field_selection(mypy):
+    result = mypy.run(MODEL + """
+    Partial = User.model_as_partial("name", "age")
+    Partial()   # both selected, so both optional
+    """)
+    assert result.errors == []
+
+
+def test_field_with_default_stays_optional_and_keeps_type(mypy):
+    result = mypy.run(MODEL_WITH_DEFAULT + """
+    Partial = User.model_as_partial("name")
+    Partial()                     # name optional (selected), count optional (has default)
+    reveal_type(Partial().name)   # str | None
+    reveal_type(Partial().count)  # int, not wrapped in Optional
+    """)
+    assert result.errors == []
+    assert "str | None" in result.stdout
+    assert "int | None" not in result.stdout  # count keeps its plain type
+
+
+def test_non_literal_field_arg_degrades_gracefully(mypy):
+    result = mypy.run(MODEL + """
+    field = "age"
+    Partial = User.model_as_partial(field)   # non-literal: cannot be resolved statically
+    reveal_type(Partial)
+    """)
+    # Falls back to mypy's default (the classmethod return type), not a synthesized partial,
+    # and does not crash.
+    assert result.errors == []
+    assert "type[case.User]" in result.stdout
+    assert "-> case.Partial" not in result.stdout
 
 
 def test_synthetic_type_survives_incremental_cache(mypy):

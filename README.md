@@ -151,11 +151,33 @@ def something(x: PartialFoo) -> None:  # PartialFoo is a real, usable type
     ...
 ```
 
-Currently the plugin supports the no-argument `model_as_partial()` call (all fields
-become optional) in the `PartialFoo = Foo.model_as_partial()` assignment form.
-Field-selecting calls (`model_as_partial("id")`), `recursive=True`, and non-assignment
-uses are not handled yet and fall back to the checker's default behaviour (never a crash
-or a silently wrong type). `pyright` is not supported yet.
+The plugin also understands field-selecting calls, where only the named fields become
+optional and the rest keep their original requiredness:
+
+```python
+class User(PartialModelMixin, BaseModel):
+    id: int
+    name: str
+
+
+PatchName = User.model_as_partial("name")
+
+PatchName(id=1)                    # OK, only `name` was made optional
+PatchName()                        # error: missing named argument "id"
+reveal_type(PatchName(id=1).name)  # str | None
+```
+
+Supported: the no-argument `model_as_partial()` / `as_partial()` call (all fields become
+optional) and calls that select fields by literal name (`model_as_partial("name")`), both in
+the `Partial = Model.model_as_partial(...)` assignment form.
+
+`recursive=` is not fully supported yet: the call still produces a flat partial (top-level
+fields become optional), but nested models are not recursed into, so it is stricter than the
+runtime behaviour rather than wrong.
+
+These fall back to the checker's default instead (never a crash or a silently wrong type):
+field lists that cannot be resolved statically (non-literal arguments, `*args` splats, or
+dotted names like `"items.name"`), and non-assignment uses. `pyright` is not supported yet.
 
 ## Known limitations
 
