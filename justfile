@@ -34,6 +34,8 @@ ruff *args: (uv "run" "ruff" "check" "pydantic_partial" "tests" args)
 
 pyright *args: (uv "run" "pyright" "pydantic_partial" args)
 
+mypy *args: (uv "run" "mypy" "pydantic_partial" args)
+
 lint: ruff pyright
 
 release version: (uv "version" version)
