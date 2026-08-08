@@ -5,7 +5,7 @@ on:
   schedule:
     - cron: '0 7 * * 1'
 jobs:
-  lint:
+  lint-ruff:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -17,7 +17,36 @@ jobs:
         uses: astral-sh/setup-uv@v7
       - name: Install the dependencies
         run: uv sync --all-extras --dev
-      - name: Lint with ruff & pyright
+      - name: Lint with ruff
         run: |
           uv run ruff check pydantic_partial tests
+  lint-pyright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version-file: ".python-version"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install the dependencies
+        run: uv sync --all-extras --dev
+      - name: Lint with pyright
+        run: |
           uv run pyright pydantic_partial
+  lint-mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version-file: ".python-version"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install the dependencies
+        run: uv sync --all-extras --dev
+      - name: Lint with mypy
+        run: |
+          uv run mypy pydantic_partial

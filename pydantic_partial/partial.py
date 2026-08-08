@@ -33,7 +33,7 @@ from pydantic_partial.utils import copy_field_info
 try:
     from types import UnionType
 except ImportError:
-    UnionType = Union
+    UnionType = Union  # type: ignore[misc,assignment]
 
 import pydantic
 
