@@ -194,7 +194,7 @@ def test_partial_allows_explicit_recursive(
     items_required: bool,
     name_required: bool,
     age_required: bool,
-    example_items: Iterable[None | list[Any]],
+    example_items: Iterable[list[Any] | None],
 ):
     SomethingListPartial = SomethingList.model_as_partial(*partial_fields,recursive=recursive)
 
