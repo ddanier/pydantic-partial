@@ -67,7 +67,7 @@ def test_init_dominates_pydantic_required_init(mypy):
     UserPartial = User.model_as_partial()
     UserPartial()
     """)
-    assert not any("Missing named argument" in e for e in result.errors), result.stdout
+    assert result.errors == [], result.stdout
 
 
 def test_matches_regardless_of_receiver_module(mypy):
