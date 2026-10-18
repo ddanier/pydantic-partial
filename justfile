@@ -38,6 +38,10 @@ mypy *args: (uv "run" "mypy" "pydantic_partial" args)
 
 lint: ruff pyright
 
+qa: lint test
+
+qa-all: lint test-all
+
 release version: (uv "version" version)
     git add pyproject.toml
     git commit -m "release: 🔖 v$(uv version --short)" --no-verify
