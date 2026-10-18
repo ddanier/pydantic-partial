@@ -36,7 +36,7 @@ pyright *args: (uv "run" "pyright" "pydantic_partial" args)
 
 mypy *args: (uv "run" "mypy" "pydantic_partial" args)
 
-lint: ruff pyright
+lint: ruff pyright mypy
 
 qa: lint test
 
