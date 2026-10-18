@@ -105,7 +105,7 @@ def create_partial_model(
                     )
                 ]
             else:
-                field_annotation = _partial_annotation_arg(field_name, field_annotation)
+                field_annotation = _partial_annotation_arg(field_name, field_annotation)  # pyright: ignore[reportArgumentType]
 
         # Construct new field definition
         if field_name in fields_:
