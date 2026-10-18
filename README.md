@@ -217,4 +217,5 @@ are unsure about whether your changes really suits the project please create an
 issue first, to talk about this.
 
 Please do not contribute AI generated code unless we explicitly talked about
-this and agreed upon doing so first. In general I do not want AI contributions.
+this and agreed upon doing so first. In general I do not want vibe coded
+contributions.
